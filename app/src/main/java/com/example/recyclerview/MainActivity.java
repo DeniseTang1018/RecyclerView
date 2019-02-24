@@ -19,11 +19,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements MyAdapter.OnItemClickListener  {
 
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+    //private MyAdapter adapter;
     private List<ListItem> listItems;
 
 
@@ -34,8 +35,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
 
         Call<List<ListItem>> call = RetrofitClient.getInstance().getApi().getEvents("supersecrettoken");
         call.enqueue(new Callback<List<ListItem>>() {
@@ -44,10 +44,7 @@ public class MainActivity extends AppCompatActivity  {
                 if(response.isSuccessful()){
                     listItems = response.body();
                     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                    adapter = new MyAdapter(listItems, MainActivity.this);
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(adapter);
+                    initRecyclerView();
 
                 }
             }
@@ -62,6 +59,18 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    public void onItemClick(int position) {
 
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("id",listItems.get(position).getId());
+        startActivity(intent);
 
+    }
+    private void initRecyclerView(){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        adapter = new MyAdapter(listItems, MainActivity.this,this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
 }

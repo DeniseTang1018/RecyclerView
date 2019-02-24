@@ -1,4 +1,4 @@
-package com.example.recyclerview;
+package com.example.recyclerview.Retrofit;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -1,7 +1,6 @@
 package com.example.recyclerview.Retrofit;
 import java.util.List;
 
-import com.example.recyclerview.Speakers;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -103,6 +102,6 @@ public class Event {
     }
 
     public void setSpeakers(List<Speakers> speakers) {
-        this.speakers = speakers;
+       this.speakers = speakers;
     }
 }

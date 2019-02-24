@@ -8,6 +8,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Api {
@@ -27,13 +28,13 @@ public interface Api {
     @GET("speakers/{id}")
     Call<Speaker> getSpeaker(
             @Header("Authorization") String authToken,
-            @Query("id") int id
+            @Path("id") int id
     );
 
-     @GET("events")
+     @GET("events/{id}")
     Call<Event> getEvent(
             @Header("Authorization")String authToken,
-            @Query("id") int id
+            @Path("id") int id
      );
 
 }

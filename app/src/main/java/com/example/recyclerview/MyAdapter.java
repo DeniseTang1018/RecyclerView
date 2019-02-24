@@ -23,13 +23,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private List<ListItem> listItems;
     private Context context;
+    private OnItemClickListener mListener;
+
+
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+//    public void setOnItemClickListener(OnItemClickListener listener){
+//        mListener = listener;
+//    }
 
 
 
 
-    public MyAdapter(List<ListItem> listItems, Context context) {
+    public MyAdapter(List<ListItem> listItems, Context context,OnItemClickListener onItemClickListener) {
         this.listItems = listItems;
         this.context = context;
+        this.mListener = onItemClickListener;
     }
 
     @NonNull
@@ -38,7 +50,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item,viewGroup,false);
 
-        return new ViewHolder(v);
+        return new ViewHolder(v,mListener);
     }
 
     @Override
@@ -60,12 +72,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
         viewHolder.textViewTime.setText(eventTime);
         Picasso.get().load(listItem.getImageUrl()).fit().centerInside().into(viewHolder.imageView);
-        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "You click "+ listItem.getTitle(),Toast.LENGTH_SHORT).show();
-            }
-        });
+//        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context, "You click "+ listItem.getTitle(),Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
     }
@@ -75,18 +87,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return listItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView textViewTitle ;
         public TextView textViewTime;
         public ImageView imageView;
-        public LinearLayout linearLayout;
+        OnItemClickListener onItemClickListener;
+//        public LinearLayout linearLayout;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView,OnItemClickListener onItemClickListener ) {
             super(itemView);
             textViewTime = (TextView) itemView.findViewById(R.id.tvTime);
             textViewTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             imageView= (ImageView)  itemView.findViewById(R.id.imageView);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+//            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(getAdapterPosition());
         }
     }
 
